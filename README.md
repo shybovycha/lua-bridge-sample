@@ -6,7 +6,11 @@ This project shows how simply and elegantly could Lua be bind to C++.
 
 ## Dependencies
 
-You'll need **Lua 5.2** to be installed in order to compile this sample.
+You'll need **Lua 5.2** development package to be installed in order to compile this sample. 
+
+For example, on Debian-based Linux distros you may use `sudo apt-get install liblua5.2-dev`. 
+
+On MacOS X you may use `brew install lua`.
 
 ## Explanation
 
