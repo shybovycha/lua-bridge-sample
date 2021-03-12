@@ -4,15 +4,20 @@
 
 This project shows how simply and elegantly could Lua be bind to C++.
 
-## Dependencies
+## Build and run
 
-You'll need **Lua 5.2** development package to be installed in order to compile this sample. 
+You'll need [vcpkg](https://github.com/microsoft/vcpkg) and [CMake](https://cmake.org/) in order to build this project.
 
-For example, on Debian-based Linux distros you may use `sudo apt-get install liblua5.2-dev`. 
+Then just use
 
-On MacOS X you may use `brew install lua`.
+```
+$ cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=$VCPKG_PATH/scripts/buildsystems/vcpkg.cmake
+$ cmake --build build
+```
 
-## Explanation
+This will create an executable at `build/lua-bridge-sample`.
+
+## How it works
 
 ### A bit of Lua VM
 

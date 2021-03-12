@@ -1,1 +1,4 @@
-lua_test1
+out
+build
+.vs
+CMakeSettings.json
