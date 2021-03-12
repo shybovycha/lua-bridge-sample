@@ -7,67 +7,67 @@ extern "C"
 
 #include "LuaBridge/LuaBridge.h"
 
-class A 
-{
+#include <iostream>
+
+class A {
 protected:
     std::string name;
 
 public:
-    A(std::string s)
-    {
+    A(std::string s) {
         this->name = s;
     }
 
-    std::string getName()
-    {
+    std::string getName() {
         return this->name;
     }
 
-    void printName()
-    {
-        printf("Hello, my name is %s!\n", this->name.c_str());
+    void printName() {
+        std::cout << "[C++ CODE] Hello, my name is " << this->name << "!\n";
     }
 };
 
-void report_errors(lua_State *L, int status)
-{
-    if (status != 0) 
-    {
-        printf("-- %s\n", lua_tostring(L, -1));
-        lua_pop(L, 1); // remove error message
+void report_errors(lua_State *luaState, int status) {
+    if (status != 0) {
+        std::cout << "[LUA ERROR] " << lua_tostring(luaState, -1) << "\n";
+
+        // remove error message from Lua state
+        lua_pop(luaState, 1);
     }
 }
 
-int main()
-{
+int main() {
     // create a Lua state
-    lua_State* L = luaL_newstate();
+    lua_State* luaState = luaL_newstate();
 
     // load standard libs 
-    luaL_openlibs(L);             
+    luaL_openlibs(luaState);
 
-    luabridge::getGlobalNamespace(L)
-        //.beginNamespace("test")
-            .beginClass<A>("A")
-                .addConstructor<void(*) (std::string)>()
-                .addFunction("getName", &A::getName)
-                .addFunction("printName", &A::printName)
-            .endClass();
-        //.endNamespace();
+    // expose the A class to the Lua scripts
+    luabridge::getGlobalNamespace(luaState)
+        .beginClass<A>("A")
+        .addConstructor<void(*) (std::string)>()
+        .addFunction("getName", &(A::getName))
+        .addFunction("printName", &(A::printName))
+        .endClass();
 
+    // create a global variable (an instance of A class) in Lua scope
     A* a = new A("some_var");
-    luabridge::push(L, a);
-    lua_setglobal(L, "a");
+    luabridge::push(luaState, a);
+    lua_setglobal(luaState, "a");
 
-    int lscript = luaL_dofile(L, "test1.lua");
+    // load some code from Lua file
+    int lscript = luaL_dofile(luaState, "test1.lua");
 
-    report_errors(L, lscript);
+    // define error reporter for any Lua error
+    report_errors(luaState, lscript);
 
-    luabridge::LuaRef runHandler = luabridge::getGlobal(L, "runHandler");
+    // call function defined in Lua script
+    luabridge::LuaRef runHandler = luabridge::getGlobal(luaState, "runHandler");
 
     int x = runHandler(15, 12);
 
-    printf("(15 + 12) * 2 = %d\n", x);
+    std::cout << "[EVALUATE LUA] (15 + 12) * 2 = " << x << "\n";
  
     return 0;
 }
