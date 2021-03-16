@@ -1,9 +1,9 @@
-a:printName()
+greeter:printName()
 
-local b = A('moo')
+local b = Greeter('moo')
 
 b:printName()
 
-function runHandler(a, b)
+function addAndDouble(a, b)
     return (a + b) * 2
 end
