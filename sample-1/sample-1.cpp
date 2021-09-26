@@ -10,22 +10,6 @@ extern "C"
 
 #include "LuaBridge/LuaBridge.h"
 
-class Greeter {
-public:
-    Greeter(const std::string& name) : m_name(name) {}
-
-    std::string getName() const {
-        return m_name;
-    }
-
-    void printName() {
-        std::cout << "[C++ CODE] Hello, my name is " << m_name << "!" << std::endl;
-    }
-
-private:
-    std::string m_name;
-};
-
 void report_errors(lua_State *luaState, int status) {
     if (status == 0) {
         return;
@@ -44,21 +28,8 @@ int main() {
     // load standard libs
     luaL_openlibs(luaState);
 
-    // expose the A class to the Lua scripts
-    luabridge::getGlobalNamespace(luaState)
-        .beginClass<Greeter>("Greeter")
-        .addConstructor<void(*) (const std::string&)>()
-        .addFunction("getName", &(Greeter::getName))
-        .addFunction("printName", &(Greeter::printName))
-        .endClass();
-
-    // create a global variable (an instance of A class) in Lua scope
-    auto globalGreeter = std::make_unique<Greeter>("noname");
-    luabridge::push(luaState, globalGreeter.get());
-    lua_setglobal(luaState, "greeter");
-
     // load some code from Lua file
-    int scriptLoadStatus = luaL_dofile(luaState, "test1.lua");
+    int scriptLoadStatus = luaL_dofile(luaState, "sample-1.lua");
 
     // define error reporter for any Lua error
     report_errors(luaState, scriptLoadStatus);
