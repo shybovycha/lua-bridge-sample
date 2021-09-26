@@ -4,3 +4,4 @@ project(lua-bridge-sample)
 
 add_subdirectory(sample-1)
 add_subdirectory(sample-2)
+add_subdirectory(sample-3)
