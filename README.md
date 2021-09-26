@@ -2,7 +2,17 @@
 
 ## Overview
 
-This project shows how simply and elegantly could Lua be bind to C++.
+This project shows how simply and elegantly could Lua be bind to C++ using the LuaBridge library.
+The [official documentation for LuaBridge](http://vinniefalco.github.io/LuaBridge/Manual.html#s4.1)
+is fine, but it still lacks few examples, in my opinion. This repo is aimed to fill those gaps.
+
+There are multiple samples now in the project
+
+* **sample-1** demonstrates the simplest interaction between C++ and Lua by calling a Lua script' function from C++ code
+* **sample-2** does the exact opposite - provides Lua code with references back to C++ class and lets Lua code to call C++ code
+* **sample-3** shows the use of properties and methods of a C++ class from Lua code
+* **sample-4** adds operators (read more about [metatables and metamethods](http://www.lua.org/manual/5.4/manual.html#2.4)) to the C++/Lua class and uses those operators in Lua code
+* **sample-5** showcases passing lists of objects between C++ and Lua
 
 ## Build and run
 
@@ -22,7 +32,7 @@ This will create an executable at `build/lua-bridge-sample`.
 ### A bit of Lua VM
 
 Each Lua script works on top of Lua Virtual Machine. And variables and
-code calls between your host (core code, which invokes Lua VM and though -
+code calls between your host (core code, which invokes Lua VM and thus -
 scripts' runs) are done in an interesting stack-manner.
 
 See, you have a stack, where you could `push` something to and then `pop`
