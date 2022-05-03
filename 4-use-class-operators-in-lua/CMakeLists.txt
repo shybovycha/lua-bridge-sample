@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(sample-4)
+project(4-use-class-operators-in-lua)
 
-set(TARGET_NAME sample-4)
-set(SOURCES "sample-4.cpp")
+set(TARGET_NAME "4-use-class-operators-in-lua")
+set(SOURCES "main.cpp")
 
 add_executable(${TARGET_NAME} ${SOURCES})
 

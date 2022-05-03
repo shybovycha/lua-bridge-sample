@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(sample-2)
+project(5-pass-list-of-objects-to-lua)
 
-set(TARGET_NAME "sample-2")
-set(SOURCES "sample-2.cpp")
+set(TARGET_NAME "5-pass-list-of-objects-to-lua")
+set(SOURCES "main.cpp")
 
 add_executable(${TARGET_NAME} ${SOURCES})
 
@@ -16,4 +16,4 @@ find_path(LUABRIDGE_INCLUDE_DIRS "LuaBridge/List.h")
 target_include_directories(${TARGET_NAME} PRIVATE ${LUABRIDGE_INCLUDE_DIRS})
 
 # copy Lua sources to the target directory
-add_custom_command(TARGET ${TARGET_NAME} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/sample-2.lua ${CMAKE_CURRENT_BINARY_DIR})
+add_custom_command(TARGET ${TARGET_NAME} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/sample-5.lua ${CMAKE_CURRENT_BINARY_DIR})

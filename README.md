@@ -1,4 +1,4 @@
-# LuaBridge sample
+# LuaBridge samples
 
 ## Overview
 
@@ -8,12 +8,12 @@ is fine, but it still lacks few examples, in my opinion. This repo is aimed to f
 
 There are multiple samples now in the project
 
-* **sample-1** demonstrates the simplest interaction between C++ and Lua by calling a Lua script' function from C++ code
-* **sample-2** does the exact opposite - provides Lua code with references back to C++ class and lets Lua code to call C++ code
-* **sample-3** shows the use of properties and methods of a C++ class from Lua code
-* **sample-4** adds operators (read more about [metatables and metamethods](http://www.lua.org/manual/5.4/manual.html#2.4)) to the C++/Lua class and uses those operators in Lua code
-* **sample-5** showcases passing lists of objects between C++ and Lua
-* **sample-6** using global variables and maps (aka hashtables, dictionaries)
+1. `1-call-lua-function-from-cpp` - demonstrates the simplest interaction between C++ and Lua by calling a Lua script' function from C++ code
+2. `2-call-cpp-function-from-lua` - does the exact opposite - provides Lua code with references back to C++ class and lets Lua code to call C++ code
+3. `3-expose-cpp-class-to-lua` - shows the use of properties and methods of a C++ class from Lua code
+4. `4-use-class-operators-in-lua` - adds operators (read more about [metatables and metamethods](http://www.lua.org/manual/5.4/manual.html#2.4)) to the C++/Lua class and uses those operators in Lua code
+5. `5-pass-list-of-objects-to-lua` - showcases passing lists of objects between C++ and Lua
+6. `6-pass-map-from-lua-to-cpp` - using global variables and maps (aka hashtables, dictionaries)
 
 ## Build and run
 
@@ -21,7 +21,7 @@ You'll need [vcpkg](https://github.com/microsoft/vcpkg) and [CMake](https://cmak
 
 Then just use
 
-```
+```bash
 $ cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=$VCPKG_PATH/scripts/buildsystems/vcpkg.cmake
 $ cmake --build build
 ```
@@ -54,7 +54,7 @@ and your scripts.
 
 Say, you have a class named `A`:
 
-```c++
+```cpp
 class A
 {
 public:

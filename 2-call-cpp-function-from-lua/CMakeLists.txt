@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(sample-1)
+project(2-call-cpp-function-from-lua)
 
-set(TARGET_NAME sample-1)
-set(SOURCES "sample-1.cpp")
+set(TARGET_NAME "2-call-cpp-function-from-lua")
+set(SOURCES "main.cpp")
 
 add_executable(${TARGET_NAME} ${SOURCES})
 
@@ -16,4 +16,4 @@ find_path(LUABRIDGE_INCLUDE_DIRS "LuaBridge/List.h")
 target_include_directories(${TARGET_NAME} PRIVATE ${LUABRIDGE_INCLUDE_DIRS})
 
 # copy Lua sources to the target directory
-add_custom_command(TARGET ${TARGET_NAME} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/sample-1.lua ${CMAKE_CURRENT_BINARY_DIR})
+add_custom_command(TARGET ${TARGET_NAME} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/sample-2.lua ${CMAKE_CURRENT_BINARY_DIR})

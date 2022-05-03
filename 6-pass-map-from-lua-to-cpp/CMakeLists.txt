@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(sample-6)
+project(6-pass-map-from-lua-to-cpp)
 
-set(TARGET_NAME sample-6)
-set(SOURCES "sample-6.cpp")
+set(TARGET_NAME "6-pass-map-from-lua-to-cpp")
+set(SOURCES "main.cpp")
 
 add_executable(${TARGET_NAME} ${SOURCES})
 

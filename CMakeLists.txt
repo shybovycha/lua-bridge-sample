@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(lua-bridge-sample)
+project(lua-bridge-samples)
 
-add_subdirectory(sample-1)
-add_subdirectory(sample-2)
-add_subdirectory(sample-3)
-add_subdirectory(sample-4)
-add_subdirectory(sample-5)
-add_subdirectory(sample-6)
+add_subdirectory(1-call-lua-function-from-cpp)
+add_subdirectory(2-call-cpp-function-from-lua)
+add_subdirectory(3-expose-cpp-class-to-lua)
+add_subdirectory(4-use-class-operators-in-lua)
+add_subdirectory(5-pass-list-of-objects-to-lua)
+add_subdirectory(6-pass-map-from-lua-to-cpp)
