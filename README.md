@@ -13,6 +13,7 @@ There are multiple samples now in the project
 * **sample-3** shows the use of properties and methods of a C++ class from Lua code
 * **sample-4** adds operators (read more about [metatables and metamethods](http://www.lua.org/manual/5.4/manual.html#2.4)) to the C++/Lua class and uses those operators in Lua code
 * **sample-5** showcases passing lists of objects between C++ and Lua
+* **sample-6** using global variables and maps (aka hashtables, dictionaries)
 
 ## Build and run
 
