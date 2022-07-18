@@ -7,6 +7,7 @@ extern "C"
 
 #include <memory>
 #include <iostream>
+#include <string_view>
 
 #include "LuaBridge/LuaBridge.h"
 
@@ -66,27 +67,6 @@ private:
     double m_x;
     double m_y;
     double m_z;
-};
-
-class Entity {
-public:
-    Entity(const std::string& name, const Vector3& position) : m_name(name), m_position(position) {}
-
-    std::string getName() const {
-        return m_name;
-    }
-
-    Vector3 getPosition() const {
-        return m_position;
-    }
-
-    void setPosition(const Vector3& position) {
-        m_position = position;
-    }
-
-private:
-    std::string m_name;
-    Vector3 m_position;
 };
 
 void report_errors(lua_State *luaState, int status) {

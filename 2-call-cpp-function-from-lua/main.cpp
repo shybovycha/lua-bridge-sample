@@ -7,12 +7,13 @@ extern "C"
 
 #include <memory>
 #include <iostream>
+#include <string_view>
 
 #include "LuaBridge/LuaBridge.h"
 
 class Greeter {
 public:
-    Greeter(const std::string& name) : m_name(name) {}
+    Greeter(const std::string_view name) : m_name(name) {}
 
     std::string getName() const {
         return m_name;

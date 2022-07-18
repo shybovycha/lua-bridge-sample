@@ -1,11 +1,13 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
-project(6-pass-map-from-lua-to-cpp)
+project(6-pass-map-from-lua-to-cpp LANGUAGES CXX)
 
 set(TARGET_NAME "6-pass-map-from-lua-to-cpp")
 set(SOURCES "main.cpp")
 
 add_executable(${TARGET_NAME} ${SOURCES})
+
+target_compile_features(${TARGET_NAME} PRIVATE cxx_std_20)
 
 include(FindLua)
 find_package(lua REQUIRED)

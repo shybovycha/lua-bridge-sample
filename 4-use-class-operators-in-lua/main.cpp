@@ -96,7 +96,7 @@ void printString(const std::string& message) {
 
 int main() {
     // create a Lua state
-    lua_State* luaState = luaL_newstate();
+    auto luaState = luaL_newstate();
 
     // load standard libs
     luaL_openlibs(luaState);
@@ -123,7 +123,7 @@ int main() {
     report_errors(luaState, scriptLoadStatus);
 
     // call Lua script' function
-    luabridge::LuaRef testVector = luabridge::getGlobal(luaState, "testVector");
+    auto testVector = luabridge::getGlobal(luaState, "testVector");
 
     testVector(Vector3(1.0, 2.0, 3.0));
 

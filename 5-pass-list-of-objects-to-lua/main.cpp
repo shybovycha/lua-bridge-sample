@@ -5,6 +5,7 @@ extern "C"
     #include <lualib.h>
 }
 
+#include <format>
 #include <memory>
 #include <iostream>
 #include <sstream>
@@ -45,9 +46,7 @@ public:
     }
 
     std::string toString() const {
-        std::ostringstream s;
-        s << "cppVector(" << m_x << ", " << m_y << ", " << m_z << ")";
-        return s.str();
+        return std::format("cppVector({}, {}, {})", m_x, m_y, m_z);
     }
 
     double getX() const {
@@ -83,7 +82,7 @@ private:
 class Entity {
 public:
     Entity(const std::string& name, const Vector3& position) : m_name(name), m_position(position) {
-        entities.push_back(this);
+        Entity::entities.push_back(this);
     }
 
     std::string getName() const {
@@ -113,7 +112,7 @@ private:
     Vector3 m_position;
 };
 
-std::vector<Entity*> Entity::entities{};
+std::vector<Entity*> Entity::entities = {};
 
 void report_errors(lua_State *luaState, int status) {
     if (status == 0) {
@@ -167,21 +166,20 @@ int main() {
     report_errors(luaState, scriptLoadStatus);
 
     // create a few entities; all be tracked in Entity::entities vector
-    auto entity1 = new Entity("entity-1", Vector3(0.0, 0.0, 0.0));
-    auto entity2 = new Entity("entity-2", Vector3(0.0, -1.0, 0.0));
-    auto entity3 = new Entity("entity-3", Vector3(0.0, 1.0, 0.0));
-    auto entity4 = new Entity("entity-4", Vector3(0.0, 2.0, 0.0));
+    auto entity1 = std::make_shared<Entity>("entity-1", Vector3(0.0, 0.0, 0.0));
+    auto entity2 = std::make_shared<Entity>("entity-2", Vector3(0.0, -1.0, 0.0));
+    auto entity3 = std::make_shared<Entity>("entity-3", Vector3(0.0, 1.0, 0.0));
+    auto entity4 = std::make_shared<Entity>("entity-4", Vector3(0.0, 2.0, 0.0));
 
     // call Lua script' function
-    luabridge::LuaRef findCollisions = luabridge::getGlobal(luaState, "findCollisions");
+    auto findCollisions = luabridge::getGlobal(luaState, "findCollisions");
 
-    std::vector<Entity*> collisionTestResult = findCollisions(entity1, 1.0);
+    // note: Lua operates raw pointers, not smart pointers
+    std::vector<Entity*> collisionTestResult = findCollisions(entity1.get(), 1.0);
 
     std::cout << "[C++] [test1] Collisions detected: " << collisionTestResult.size() << std::endl;
 
-    for (size_t i = 0; i < collisionTestResult.size(); ++i) {
-        const Entity* entity = collisionTestResult[i];
-
+    for (auto& entity : collisionTestResult) {
         std::cout << "[C++] [test1] collision: " << entity->getName() << std::endl;
     }
 
@@ -190,13 +188,11 @@ int main() {
 
     applyGravity(collisionTestResult);
 
-    std::vector<Entity*> collisionTestResult2 = findCollisions(entity1, 1.0);
+    std::vector<Entity*> collisionTestResult2 = findCollisions(entity1.get(), 1.0);
 
     std::cout << "[C++] [test2] Collisions detected: " << collisionTestResult2.size() << std::endl;
 
-    for (size_t i = 0; i < collisionTestResult2.size(); ++i) {
-        const Entity* entity = collisionTestResult2[i];
-
+    for (auto& entity : collisionTestResult2) {
         std::cout << "[C++] [test2] collision: " << entity->getName() << std::endl;
     }
 

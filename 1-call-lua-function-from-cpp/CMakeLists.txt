@@ -1,11 +1,13 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
-project(1-call-lua-function-from-cpp)
+project(1-call-lua-function-from-cpp LANGUAGES CXX)
 
 set(TARGET_NAME "1-call-lua-function-from-cpp")
 set(SOURCES "main.cpp")
 
 add_executable(${TARGET_NAME} ${SOURCES})
+
+target_compile_features(${TARGET_NAME} PRIVATE cxx_std_20)
 
 include(FindLua)
 find_package(lua REQUIRED)

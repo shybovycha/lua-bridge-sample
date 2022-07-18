@@ -58,7 +58,7 @@ Say, you have a class named `A`:
 class A
 {
 public:
-    A(const std::string& name) : m_name(name) {}
+    A(const std::string_view name) : m_name(name) {}
 
     std::string getName()
     {
@@ -152,3 +152,7 @@ std::cout << "(1 + 3) * 2 = " << x << std::endl;
 ```
 
 When you run this, you'll get the `8` number on your screen. Isn't that charming?
+
+## TODO
+
+Check out [LuaBridge3](https://github.com/kunitoki/LuaBridge3) for more modern LuaBridge version (also, support for smart pointers).
