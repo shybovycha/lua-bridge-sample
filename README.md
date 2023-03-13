@@ -2,9 +2,11 @@
 
 ## Overview
 
-This project shows how simply and elegantly could Lua be bind to C++ using the LuaBridge library.
-The [official documentation for LuaBridge](http://vinniefalco.github.io/LuaBridge/Manual.html#s4.1)
+This project shows how simply and elegantly could Lua be bind to C++ using the LuaBridge3 library.
+The [official documentation for LuaBridge](https://kunitoki.github.io/LuaBridge3/Manual)
 is fine, but it still lacks few examples, in my opinion. This repo is aimed to fill those gaps.
+
+For the `LuaBridge` (not `LuaBridge3`) samples, check the [`luabridge`](https://github.com/shybovycha/lua-bridge-sample/tree/luabridge) branch - the API of the libraries differs slightly.
 
 There are multiple samples now in the project
 
@@ -14,6 +16,7 @@ There are multiple samples now in the project
 4. `4-use-class-operators-in-lua` - adds operators (read more about [metatables and metamethods](http://www.lua.org/manual/5.4/manual.html#2.4)) to the C++/Lua class and uses those operators in Lua code
 5. `5-pass-list-of-objects-to-lua` - showcases passing lists of objects between C++ and Lua
 6. `6-pass-map-from-lua-to-cpp` - using global variables and maps (aka hashtables, dictionaries)
+7. `7-return-multiple-values-from-function` - returning multiple values from a Lua function and handling those in C++
 
 ## Build and run
 
@@ -26,7 +29,7 @@ $ cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=$VCPKG_PATH/scripts/buildsystems/vc
 $ cmake --build build
 ```
 
-This will create an executable at `build/lua-bridge-sample`.
+This will create executables under the `build` directory (e.g. `build/1-call-lua-function-from-cpp/Debug/1-call-lua-function-from-cpp.exe`).
 
 ## How it works
 
@@ -135,7 +138,7 @@ languages: it allows you to pass arguments and get the result of single run.
 
 **But beware of type checks! Lua is not statically typed language!**
 
-Let's demonstrate this rewriting our script like this:
+Let's demonstrate this by rewriting our script like this:
 
 ```lua
 function runHandler(a, b)
@@ -143,16 +146,60 @@ function runHandler(a, b)
 end
 ```
 
-and the core:
+and the application:
 
 ```cpp
-int x = runHandler(1, 3);
+luabridge::LuaResult res = runHandler(1, 3);
+
+int x = res[0];
 
 std::cout << "(1 + 3) * 2 = " << x << std::endl;
 ```
 
 When you run this, you'll get the `8` number on your screen. Isn't that charming?
 
-## TODO
+## Note about changes introduced in LuaBridge3
 
-Check out [LuaBridge3](https://github.com/kunitoki/LuaBridge3) for more modern LuaBridge version (also, support for smart pointers).
+Since Lua supports returning multiple values from a function, calling a function now returns `luabridge::LuaResult` instead of the raw type.
+
+Besides of checking if the call was successful or not (by using `.wasOk()`, `.hasFailed()`, `.errorMessage()`, etc. on the `LuaResult` variable)
+one can treat it as Lua table.
+
+Thus if a function returns multiple values:
+
+```lua
+function moo()
+    return 1, 2
+end
+```
+
+one can get the values like the folls:
+
+```cpp
+auto moo = luabridge::getGlobal(luaState, "moo");
+auto res = moo();
+
+int x1 = res[0];
+int x2 = res[1];
+```
+
+Note how values returned by a function can all have different type:
+
+```lua
+function foo()
+    return -3.14, "moo", 12
+end
+```
+
+Accessing them would require a type casting (potentially implicit):
+
+```cpp
+auto foo = luabridge::getGlobal(luaState, "foo");
+auto res = foo();
+
+// implicit casting to string
+std::cout << res[0] << " " << res[1] << " " << res[2] << "\n";
+
+// explicit casting
+std::cout << static_cast<float>(res[0]) << " " << res[1] << " " << static_cast<int>(res[2]) << "\n";
+```
