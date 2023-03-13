@@ -11,8 +11,8 @@ extern "C"
 #include <map>
 #include <string>
 
-#include "LuaBridge/LuaBridge.h"
-#include "LuaBridge/Map.h"
+#include <luabridge3/LuaBridge/LuaBridge.h>
+#include <luabridge3/LuaBridge/Map.h>
 
 void report_errors(lua_State *luaState, int status) {
     if (status == 0) {

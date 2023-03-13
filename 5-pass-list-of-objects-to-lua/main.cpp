@@ -10,8 +10,8 @@ extern "C"
 #include <iostream>
 #include <sstream>
 
-#include "LuaBridge/LuaBridge.h"
-#include "LuaBridge/Vector.h"
+#include <luabridge3/LuaBridge/LuaBridge.h>
+#include <luabridge3/LuaBridge/Vector.h>
 
 class Vector3 {
 public:
@@ -175,7 +175,9 @@ int main() {
     auto findCollisions = luabridge::getGlobal(luaState, "findCollisions");
 
     // note: Lua operates raw pointers, not smart pointers
-    std::vector<Entity*> collisionTestResult = findCollisions(entity1.get(), 1.0);
+    auto res1 = findCollisions(entity1.get(), 1.0);
+
+    std::vector<Entity*> collisionTestResult = res1[0];
 
     std::cout << "[C++] [test1] Collisions detected: " << collisionTestResult.size() << std::endl;
 
@@ -188,7 +190,9 @@ int main() {
 
     applyGravity(collisionTestResult);
 
-    std::vector<Entity*> collisionTestResult2 = findCollisions(entity1.get(), 1.0);
+    auto res2 = findCollisions(entity1.get(), 1.0);
+
+    std::vector<Entity*> collisionTestResult2 = res2[0];
 
     std::cout << "[C++] [test2] Collisions detected: " << collisionTestResult2.size() << std::endl;
 

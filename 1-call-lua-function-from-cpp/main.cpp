@@ -8,7 +8,7 @@ extern "C"
 #include <memory>
 #include <iostream>
 
-#include "LuaBridge/LuaBridge.h"
+#include <luabridge3/LuaBridge/LuaBridge.h>
 
 void report_errors(lua_State *luaState, int status) {
     if (status == 0) {
@@ -37,9 +37,18 @@ int main() {
     // call function defined in Lua script
     luabridge::LuaRef addAndDouble = luabridge::getGlobal(luaState, "addAndDouble");
 
-    int x = addAndDouble(15, 12);
+    luabridge::LuaResult res = addAndDouble(15, 12);
 
-    std::cout << "[EVALUATE LUA] (15 + 12) * 2 = " << x << std::endl;
+    int x1 = res[0];
+
+    std::cout << "[EVALUATE LUA] (15 + 12) * 2 = " << x1 << std::endl;
+
+    // call function using free luabridge function luabridge::call<T...>(LuaRef, args...)
+    luabridge::LuaResult res2 = luabridge::call(addAndDouble, 15, 12);
+
+    int x2 = res2[0];
+
+    std::cout << "[EVALUATE LUA (same)] (15 + 12) * 2 = " << x2 << std::endl;
 
     return 0;
 }

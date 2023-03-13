@@ -2,3 +2,4 @@ out
 build
 .vs
 CMakeSettings.json
+vcpkg_installed/

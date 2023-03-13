@@ -9,7 +9,7 @@ extern "C"
 #include <iostream>
 #include <string_view>
 
-#include "LuaBridge/LuaBridge.h"
+#include <luabridge3/LuaBridge/LuaBridge.h>
 
 class Vector3 {
 public:

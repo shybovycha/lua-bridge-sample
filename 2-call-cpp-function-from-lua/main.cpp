@@ -9,7 +9,7 @@ extern "C"
 #include <iostream>
 #include <string_view>
 
-#include "LuaBridge/LuaBridge.h"
+#include <luabridge3/LuaBridge/LuaBridge.h>
 
 class Greeter {
 public:
@@ -55,8 +55,7 @@ int main() {
 
     // create a global variable (an instance of a Greeter class) in Lua scope
     auto globalGreeter = std::make_unique<Greeter>("noname");
-    luabridge::push(luaState, globalGreeter.get());
-    lua_setglobal(luaState, "greeter");
+    luabridge::setGlobal(luaState, globalGreeter.get(), "greeter");
 
     // load some code from Lua file
     int scriptLoadStatus = luaL_dofile(luaState, "sample-2.lua");
