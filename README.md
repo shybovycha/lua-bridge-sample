@@ -17,6 +17,7 @@ There are multiple samples now in the project
 5. `5-pass-list-of-objects-to-lua` - showcases passing lists of objects between C++ and Lua
 6. `6-pass-map-from-lua-to-cpp` - using global variables and maps (aka hashtables, dictionaries)
 7. `7-return-multiple-values-from-function` - returning multiple values from a Lua function and handling those in C++
+8. `8-shared-library` - making a library in C++ to be used in Lua (with `require('library_name')`)
 
 ## Build and run
 
@@ -157,6 +158,60 @@ std::cout << "(1 + 3) * 2 = " << x << std::endl;
 ```
 
 When you run this, you'll get the `8` number on your screen. Isn't that charming?
+
+## Making a Lua library in C++
+
+In order to create a whole library in C++, you'll need to know about few caveats:
+
+1. there __must__ be an entry point in the library, an exported function `extern "C" __declspect(dllexport) luaopen_{library_name_underscore_case}(lua_State* L)`
+2. the function should register any classes, namespaces, functions and/or constants you want to expose from your library - by default no C++ code is exposed to Lua, despite being exported from the shared library
+3. smart pointers and collections (like `std::vector`) from standard C++ library won't work out of the box (even though you are using LuaBridge!), hence you will have to figure it out yourself, unfortunately
+
+The simplest library could be as follows:
+
+```cpp
+extern "C"
+{
+    #include <lua.h>
+    #include <lauxlib.h>
+    #include <lualib.h>
+}
+
+#include <string>
+#include <format>
+
+#include <luabridge3/LuaBridge/LuaBridge.h>
+
+int cpp_func1(lua_State* L)
+{
+    std::string s = "hello, c++ function!";
+
+    lua_pushlstring(L, s.c_str(), s.size());
+
+    return 1;
+}
+
+int cpp_func2(int a, int b)
+{
+    return (a + b) / 2;
+}
+
+extern "C" __declspec(dllexport) int luaopen_cpp_library(lua_State* L)
+{
+    luabridge::getGlobalNamespace(L)
+        .beginNamespace("cpp_library")
+            .addFunction("cpp_func1", cpp_func1)
+            .addFunction("cpp_func2", cpp_func2)
+        .endNamespace();
+
+    return 0;
+}
+```
+
+Once you have created a library in C++ and built it (as either an `.so` or `.dll` file, depending on a platform), you can use it in Lua by calling `require('library_name')`.
+
+In the example above, I deliberately created a namespace `cpp_library`, to encapsulate all the exposed functions in a contained manner.
+So that instead of just calling `cpp_func1()` in Lua code you have them all nicely packed within the `cpp_library` namespace.
 
 ## Note about changes introduced in LuaBridge3
 
